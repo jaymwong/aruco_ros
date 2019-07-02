@@ -109,6 +109,7 @@ public:
     mDetector.getThresholdParams(th1, th2);
     ROS_INFO_STREAM("Threshold method: " << " th1: " << th1 << " th2: " << th2);
     float mins, maxs;
+    mDetector.setMinMaxSize(0.025, 0.5);
     mDetector.getMinMaxSize(mins, maxs);
     ROS_INFO_STREAM("Marker size min: " << mins << "  max: " << maxs);
     ROS_INFO_STREAM("Desired speed: " << mDetector.getDesiredSpeed());
@@ -164,7 +165,7 @@ public:
       std::cout << "** Aruco detections => " << markers.size() << "\n";
 
       for (size_t i = 0; i < markers.size(); i++){
-        std::cout << "  > " << markers[i].getCenter().x << " " << markers[i].getCenter().y << "\n";
+        std::cout << "  > " << markers[i].id << " => " << markers[i].getCenter().x << " " << markers[i].getCenter().y << "\n";
       }
     }
     catch (cv_bridge::Exception& e) {
