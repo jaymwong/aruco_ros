@@ -33,7 +33,7 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 add_library(aruco_ros_utils src/aruco_ros_utils.cpp)
-target_link_libraries(aruco_ros_utils ${catkin_LIBRARIES})
+target_link_libraries(aruco_ros_utils ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(aruco_generic src/aruco_generic.cpp
                       src/aruco_ros_utils.cpp)
