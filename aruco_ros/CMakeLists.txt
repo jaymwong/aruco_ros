@@ -24,7 +24,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES aruco_ros_utils
-  CATKIN_DEPENDS aruco sensor_msgs tf 
+  CATKIN_DEPENDS aruco sensor_msgs tf
 )
 
 include_directories(
@@ -34,6 +34,11 @@ include_directories(
 )
 add_library(aruco_ros_utils src/aruco_ros_utils.cpp)
 target_link_libraries(aruco_ros_utils ${catkin_LIBRARIES})
+
+add_executable(aruco_generic src/aruco_generic.cpp
+                      src/aruco_ros_utils.cpp)
+add_dependencies(aruco_generic ${PROJECT_NAME}_gencfg)
+target_link_libraries(aruco_generic ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(single src/simple_single.cpp
                       src/aruco_ros_utils.cpp)
@@ -69,4 +74,3 @@ foreach(dir etc launch)
     install(DIRECTORY ${dir}/
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
-

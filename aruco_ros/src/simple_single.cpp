@@ -64,7 +64,7 @@ private:
   image_transport::Publisher image_pub;
   image_transport::Publisher debug_pub;
   ros::Publisher pose_pub;
-  ros::Publisher transform_pub; 
+  ros::Publisher transform_pub;
   ros::Publisher position_pub;
   ros::Publisher marker_pub; //rviz visualization marker
   ros::Publisher pixel_pub;
@@ -98,9 +98,9 @@ public:
     else if ( refinementMethod == "HARRIS" )
       mDetector.setCornerRefinementMethod(aruco::MarkerDetector::HARRIS);
     else if ( refinementMethod == "NONE" )
-      mDetector.setCornerRefinementMethod(aruco::MarkerDetector::NONE); 
-    else      
-      mDetector.setCornerRefinementMethod(aruco::MarkerDetector::LINES); 
+      mDetector.setCornerRefinementMethod(aruco::MarkerDetector::NONE);
+    else
+      mDetector.setCornerRefinementMethod(aruco::MarkerDetector::LINES);
 
     //Print parameters of aruco marker detector:
     ROS_INFO_STREAM("Corner refinement method: " << mDetector.getCornerRefinementMethod());
@@ -112,7 +112,7 @@ public:
     mDetector.getMinMaxSize(mins, maxs);
     ROS_INFO_STREAM("Marker size min: " << mins << "  max: " << maxs);
     ROS_INFO_STREAM("Desired speed: " << mDetector.getDesiredSpeed());
-    
+
 
 
     image_sub = it.subscribe("/image", 1, &ArucoSimple::image_callback, this);
@@ -185,19 +185,21 @@ public:
 
   void image_callback(const sensor_msgs::ImageConstPtr& msg)
   {
-    if ((image_pub.getNumSubscribers() == 0) &&
-        (debug_pub.getNumSubscribers() == 0) &&
-        (pose_pub.getNumSubscribers() == 0) &&
-        (transform_pub.getNumSubscribers() == 0) &&
-        (position_pub.getNumSubscribers() == 0) &&
-        (marker_pub.getNumSubscribers() == 0) &&
-        (pixel_pub.getNumSubscribers() == 0))
-    {
-      ROS_DEBUG("No subscribers, not looking for aruco markers");
-      return;
-    }
+    std::cout << "** Has image setCallback\n";
+    // if ((image_pub.getNumSubscribers() == 0) &&
+    //     (debug_pub.getNumSubscribers() == 0) &&
+    //     (pose_pub.getNumSubscribers() == 0) &&
+    //     (transform_pub.getNumSubscribers() == 0) &&
+    //     (position_pub.getNumSubscribers() == 0) &&
+    //     (marker_pub.getNumSubscribers() == 0) &&
+    //     (pixel_pub.getNumSubscribers() == 0))
+    // {
+    //   ROS_DEBUG("No subscribers, not looking for aruco markers");
+    //   return;
+    // }
 
     static tf::TransformBroadcaster br;
+    std::cout << cam_info_received << "\n";
     if(cam_info_received)
     {
       ros::Time curr_stamp(ros::Time::now());
@@ -212,6 +214,7 @@ public:
         //Ok, let's detect
         mDetector.detect(inImage, markers, camParam, marker_size, false);
         //for each marker, draw info and its boundaries in the image
+        std::cout << "Detected markers: " << markers.size() << "\n";
         for(size_t i=0; i<markers.size(); ++i)
         {
           // only publishing the selected marker
@@ -228,9 +231,9 @@ public:
                            cameraToReference);
             }
 
-            transform = 
-              static_cast<tf::Transform>(cameraToReference) 
-              * static_cast<tf::Transform>(rightToLeft) 
+            transform =
+              static_cast<tf::Transform>(cameraToReference)
+              * static_cast<tf::Transform>(rightToLeft)
               * transform;
 
             tf::StampedTransform stampedTransform(transform, curr_stamp,
@@ -333,6 +336,7 @@ public:
 
     cam_info_received = true;
     cam_info_sub.shutdown();
+    ROS_ERROR("Obtained the camera info!");
   }
 
 
