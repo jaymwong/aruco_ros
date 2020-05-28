@@ -4,6 +4,8 @@
 #include <aruco/aruco.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <tf/transform_datatypes.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace aruco_ros
 {

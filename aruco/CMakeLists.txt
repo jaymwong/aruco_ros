@@ -3,7 +3,7 @@ project(aruco)
 
 find_package(catkin)
 
-find_package(OpenCV 3 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -30,7 +30,7 @@ target_link_libraries(aruco
 
 add_executable(optimalmarkers
   src/aruco/aruco_selectoptimalmarkers.cpp)
-target_link_libraries(optimalmarkers aruco ${catkin_LIBRARIES})
+target_link_libraries(optimalmarkers aruco ${catkin_LIBRARIES}  ${OpenCV_LIBRARIES})
 
 #############
 ## Install ##
@@ -45,4 +45,3 @@ install(DIRECTORY include/
    DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
    FILES_MATCHING PATTERN "*.h"
 )
-
